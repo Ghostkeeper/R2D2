@@ -4,11 +4,20 @@
 #This plug-in is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for details.
 #You should have received a copy of the GNU Affero General Public License along with this library. If not, see <https://gnu.org/licenses/>.
 
-import cura.Stages.CuraStage
+import cura.Stages.CuraStage #We're implementing a Cura stage.
+import os.path #To find the QML components.
+import UM.PluginRegistry #To find resources in the plug-in folder.
 
 class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 	"""
 	A plug-in object that adds an additional stage to the top bar of Cura where
 	the user can enter an evaluation of how good the print result is.
 	"""
-	pass #TODO
+	def __init__(self, parent = None):
+		super().__init__(parent)
+
+		UM.Application.Application.getInstance().engineCreatedSignal.connect(self._add_sidebar_panel)
+
+	def _add_sidebar_panel(self):
+		panel = os.path.join(UM.PluginRegistry.PluginRegistry.getInstance().getPluginPath("R2D2"), "EvaluationSidebar.qml")
+		self.addDisplayComponent("sidebar", panel)

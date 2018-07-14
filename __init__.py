@@ -6,7 +6,7 @@
 
 import UM.i18n
 
-import PrintEvaluation #The plug-in object that implements the stage.
+from . import PrintEvaluation #The plug-in object that implements the stage.
 
 i18n_catalog = UM.i18n.i18nCatalog("r2d2")
 
