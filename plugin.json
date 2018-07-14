@@ -1,0 +1,8 @@
+{
+	"name": "Print Evaluation",
+	"author": "Ghostkeeper",
+	"version": "0.1",
+	"description": "Provides a form to enter data that evaluates your print after it's completed.",
+	"api": 4,
+	"i18n-catalog": "r2d2"
+}
