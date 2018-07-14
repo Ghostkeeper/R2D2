@@ -7,4 +7,8 @@
 import cura.Stages.CuraStage
 
 class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
+	"""
+	A plug-in object that adds an additional stage to the top bar of Cura where
+	the user can enter an evaluation of how good the print result is.
+	"""
 	pass #TODO
