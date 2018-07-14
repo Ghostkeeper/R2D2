@@ -16,6 +16,7 @@ class Print(PyQt5.QtCore.QObject):
 
 		self._name = "unknown"
 		self._time_date = "0000-0-0/0:00:00"
+		self._printer_type = "unknown"
 		self._evaluated_extruder = 0
 		self._extruders = [] #For each extruder, a dictionary containing "nozzle", "material", and all settings for that extruder (including global settings).
 		self._evaluation = {} #All known evaluation entries. Evaluation entries that are unknown are left out.
@@ -35,6 +36,14 @@ class Print(PyQt5.QtCore.QObject):
 		:return: The time and date that the print was made at.
 		"""
 		return self._time_date
+
+	@PyQt5.QtCore.pyqtProperty(str)
+	def printer_type(self):
+		"""
+		The type of printer that was used (definition ID).
+		:return: The type of printer that was used.
+		"""
+		return self._printer_type
 
 	@PyQt5.QtCore.pyqtProperty(int)
 	def evaluated_extruder(self):
