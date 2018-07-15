@@ -26,7 +26,10 @@ class Print(PyQt5.QtCore.QObject):
 		self._extruders = [] #For each extruder, a dictionary containing "nozzle", "material", and all settings for that extruder (including global settings).
 		self._evaluation = {} #All known evaluation entries. Evaluation entries that are unknown are left out.
 
-	@PyQt5.QtCore.pyqtProperty(str)
+	def set_name(self, new_name):
+		self._name = new_name
+
+	@PyQt5.QtCore.pyqtProperty(str, fset=set_name)
 	def name(self):
 		"""
 		The print job name.
@@ -34,7 +37,10 @@ class Print(PyQt5.QtCore.QObject):
 		"""
 		return self._name
 
-	@PyQt5.QtCore.pyqtProperty(str)
+	def set_time_date(self, new_time_date):
+		self._time_date = new_time_date
+
+	@PyQt5.QtCore.pyqtProperty(str, fset=set_time_date)
 	def time_date(self):
 		"""
 		The time and date that the print was made at.
@@ -42,7 +48,10 @@ class Print(PyQt5.QtCore.QObject):
 		"""
 		return self._time_date
 
-	@PyQt5.QtCore.pyqtProperty(str)
+	def set_printer_type(self, new_printer_type):
+		self._printer_type = new_printer_type
+
+	@PyQt5.QtCore.pyqtProperty(str, fset=set_printer_type)
 	def printer_type(self):
 		"""
 		The type of printer that was used (definition ID).
@@ -50,6 +59,10 @@ class Print(PyQt5.QtCore.QObject):
 		"""
 		return self._printer_type
 
+	def set_model_hash(self, new_model_hash):
+		self._model_hash = new_model_hash
+
+	@PyQt5.QtCore.pyqtProperty(str, fset=set_model_hash)
 	def model_hash(self):
 		"""
 		A hash of all models in the scene (after transformation).
@@ -60,13 +73,21 @@ class Print(PyQt5.QtCore.QObject):
 		"""
 		return self._model_hash
 
-	@PyQt5.QtCore.pyqtProperty(int)
+	def set_evaluated_extruder(self, new_evaluated_extruder):
+		self._evaluated_extruder = new_evaluated_extruder
+
+	@PyQt5.QtCore.pyqtProperty(int, fset=set_evaluated_extruder)
 	def evaluated_extruder(self):
 		"""
 		The extruder that the evaluation is about.
 		:return: An extruder.
 		"""
 		return self._evaluated_extruder
+
+	def add_extruder(self, extruder_nr, new_extruder):
+		while len(self._extruders) <= extruder_nr:
+			self._extruders.append({})
+		self._extruders[extruder_nr] = new_extruder
 
 	@PyQt5.QtCore.pyqtSlot(int, result="QVariantMap")
 	def extruder(self, extruder):
