@@ -11,6 +11,7 @@ import UM.PluginRegistry #To find resources in the plug-in folder.
 import UM.Scene.Iterator.DepthFirstIterator #To get the scene nodes for the scene hash.
 
 from . import Print #To create a new entry in the prints database.
+from . import Prints #To add prints to the database.
 
 class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 	"""
@@ -56,6 +57,7 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 			settings["nozzle"] = extruder_train.variant.getId()
 			settings["material"] = extruder_train.material.getId()
 			this_print.add_extruder(extruder_index, settings)
+		Prints.Prints.get_instance().add_print(this_print)
 
 
 	def _add_sidebar_panel(self):
