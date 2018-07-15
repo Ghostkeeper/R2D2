@@ -61,7 +61,9 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 			this_print.add_extruder(extruder_index, settings)
 		Prints.Prints.get_instance().add_print(this_print)
 
-
 	def _add_sidebar_panel(self):
+		"""
+		Registers the evaluation sidebar panel as a QML component.
+		"""
 		panel = os.path.join(UM.PluginRegistry.PluginRegistry.getInstance().getPluginPath("R2D2"), "EvaluationSidebar.qml")
 		self.addDisplayComponent("sidebar", panel)
