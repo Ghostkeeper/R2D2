@@ -27,6 +27,10 @@ class Print(PyQt5.QtCore.QObject):
 		self._evaluation = {} #All known evaluation entries. Evaluation entries that are unknown are left out.
 
 	def set_name(self, new_name):
+		"""
+		Sets the print job name.
+		:param new_name: The new print job name.
+		"""
 		self._name = new_name
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_name)
@@ -38,6 +42,10 @@ class Print(PyQt5.QtCore.QObject):
 		return self._name
 
 	def set_time_date(self, new_time_date):
+		"""
+		Sets the time and date that the print was made at.
+		:param new_time_date: The new time and date to remember.
+		"""
 		self._time_date = new_time_date
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_time_date)
@@ -49,6 +57,10 @@ class Print(PyQt5.QtCore.QObject):
 		return self._time_date
 
 	def set_printer_type(self, new_printer_type):
+		"""
+		Sets the printer type that was used (definition ID).
+		:param new_printer_type: The type of printer that was used.
+		"""
 		self._printer_type = new_printer_type
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_printer_type)
@@ -60,6 +72,10 @@ class Print(PyQt5.QtCore.QObject):
 		return self._printer_type
 
 	def set_model_hash(self, new_model_hash):
+		"""
+		Sets the hash of the scene.
+		:param new_model_hash: The alleged hash of the scene that was printed.
+		"""
 		self._model_hash = new_model_hash
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_model_hash)
@@ -74,6 +90,10 @@ class Print(PyQt5.QtCore.QObject):
 		return self._model_hash
 
 	def set_evaluated_extruder(self, new_evaluated_extruder):
+		"""
+		Sets the extruder to evaluate.
+		:param new_evaluated_extruder: The extruder to evaluate.
+		"""
 		self._evaluated_extruder = new_evaluated_extruder
 
 	@PyQt5.QtCore.pyqtProperty(int, fset=set_evaluated_extruder)
@@ -85,6 +105,13 @@ class Print(PyQt5.QtCore.QObject):
 		return self._evaluated_extruder
 
 	def add_extruder(self, extruder_nr, new_extruder):
+		"""
+		Adds an extruder to the print.
+		:param extruder_nr: The position of this extruder.
+		:param new_extruder: A dictionary containing all settings for that
+		extruder in addition to "nozzle" and "material, specifying the nozzle
+		and material type that were used for the print in that extruder.
+		"""
 		while len(self._extruders) <= extruder_nr:
 			self._extruders.append({})
 		self._extruders[extruder_nr] = new_extruder
