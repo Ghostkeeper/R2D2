@@ -6,6 +6,7 @@
 
 import cura.CuraApplication #Various hooks into Cura.
 import cura.Settings.ExtruderManager #To get the currently active extruder.
+import cura.Settings.MachineManager #To get the currently active material and nozzle.
 import PyQt5.QtCore
 import UM.Qt.ListModel #To expose a list to QML.
 
@@ -28,6 +29,13 @@ class Prints(UM.Qt.ListModel.ListModel):
 		self.addRoleName(self.TimeDateRole, "time_date")
 
 		self.prints = [] #A list of all prints.
+
+		#Link some signals to update the view at appropriate times.
+		application = cura.CuraApplication.CuraApplication.getInstance()
+		application.globalContainerStackChanged.connect(self._update)
+		application.getMachineManager().activeVariantChanged.connect(self._update)
+		application.getMachineManager().activeMaterialChanged.connect(self._update)
+		self._update()
 
 	def add_print(self, print):
 		"""
