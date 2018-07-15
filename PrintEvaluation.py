@@ -8,6 +8,7 @@ import cura.CuraApplication #Various hooks into Cura.
 import cura.Settings.ExtruderManager #To get the currently active extruder.
 import cura.Stages.CuraStage #We're implementing a Cura stage.
 import os.path #To find the QML components.
+import PyQt5.QtQml #To register QML components with the QML engine.
 import UM.PluginRegistry #To find resources in the plug-in folder.
 import UM.Scene.Iterator.DepthFirstIterator #To get the scene nodes for the scene hash.
 
@@ -25,6 +26,7 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 
 		application = cura.CuraApplication.CuraApplication.getInstance()
 		application.engineCreatedSignal.connect(self._add_sidebar_panel)
+		application.engineCreatedSignal.connect(self._register_qml_types)
 		application.getOutputDeviceManager().writeStarted.connect(self.save_print)
 
 	def save_print(self, output_device):
@@ -67,3 +69,10 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		"""
 		panel = os.path.join(UM.PluginRegistry.PluginRegistry.getInstance().getPluginPath("R2D2"), "EvaluationSidebar.qml")
 		self.addDisplayComponent("sidebar", panel)
+
+	def _register_qml_types(self):
+		"""
+		Registers QML objects that must be exposed to QML.
+		"""
+		PyQt5.QtQml.qmlRegisterSingletonType(Prints.Prints, "R2D2", 1, 0, "Prints", Prints.Prints.get_instance)
+		PyQt5.QtQml.qmlRegisterType(Print.Print, "R2D2", 1, 0, "Print")
