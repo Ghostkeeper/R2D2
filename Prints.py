@@ -4,6 +4,8 @@
 #This plug-in is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for details.
 #You should have received a copy of the GNU Affero General Public License along with this library. If not, see <https://gnu.org/licenses/>.
 
+import cura.CuraApplication #Various hooks into Cura.
+import cura.Settings.ExtruderManager #To get the currently active extruder.
 import PyQt5.QtCore
 import UM.Qt.ListModel #To expose a list to QML.
 
@@ -27,19 +29,17 @@ class Prints(UM.Qt.ListModel.ListModel):
 
 		self.prints = [] #A list of all prints.
 
-		self.current_printer = ""
-		self.current_nozzle = ""
-		self.current_material = ""
-
 	def add_print(self, print):
 		"""
 		Adds a print to the database and updates the model.
 		:param print: The print to add to the database.
 		"""
 		self.prints.append(print)
-		if self.current_printer == print.printer_type: #Only need to update if the print would currently be displayed.
-			extruder = print.extruder(print.evaluated_extruder)
-			if self.current_nozzle == extruder["nozzle"] and self.current_material == extruder["material"]:
+		application = cura.CuraApplication.CuraApplication.getInstance()
+		if application.getGlobalContainerStack().definition.getId() == print.printer_type: #Only need to update if the print would currently be displayed.
+			active_extruder = cura.Settings.ExtruderManager.ExtruderManager.getInstance().getActiveExtruderStack()
+			evaluated_extruder = print.extruder(print.evaluated_extruder)
+			if active_extruder.variant.getId() == evaluated_extruder["nozzle"] and active_extruder.material.getId() == evaluated_extruder["material"]:
 				self._update()
 
 	@staticmethod
@@ -58,11 +58,15 @@ class Prints(UM.Qt.ListModel.ListModel):
 		"""
 		Updates the list of prints exposed to QML.
 		"""
+		current_printer = cura.CuraApplication.CuraApplication.getInstance().getGlobalContainerStack().definition.getId()
+		active_extruder = cura.Settings.ExtruderManager.ExtruderManager.getInstance().getActiveExtruderStack()
+		current_nozzle = active_extruder.variant.getId()
+		current_material = active_extruder.material.getId()
 		items = []
 		for print in self.prints:
 			extruder = print.extruder(print.evaluated_extruder)
 			#Only show prints relevant to the current set-up.
-			if self.current_printer == print.printer_type and self.current_nozzle == extruder["nozzle"] and self.current_material == extruder["material"]:
+			if current_printer == print.printer_type and current_nozzle == extruder["nozzle"] and current_material == extruder["material"]:
 				items.append({
 					"name": print.name,
 					"time_date": print.time_date
