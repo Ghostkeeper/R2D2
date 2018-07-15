@@ -15,6 +15,8 @@ class Prints(UM.Qt.ListModel.ListModel):
 	NameRole = PyQt5.QtCore.Qt.UserRole + 1
 	TimeDateRole = PyQt5.QtCore.Qt.UserRole + 2
 
+	inst = None
+
 	def __init__(self, parent=None):
 		"""
 		Adds the role names to itself.
@@ -39,6 +41,18 @@ class Prints(UM.Qt.ListModel.ListModel):
 			extruder = print.extruder(print.evaluated_extruder)
 			if self.current_nozzle == extruder["nozzle"] and self.current_material == extruder["material"]:
 				self._update()
+
+	@staticmethod
+	def get_instance():
+		"""
+		Get an instance of this class.
+
+		This implements the singleton pattern.
+		:return: An instance of this class.
+		"""
+		if Prints.inst is None:
+			Prints.inst = Prints()
+		return Prints.inst
 
 	def _update(self):
 		pass #TODO
