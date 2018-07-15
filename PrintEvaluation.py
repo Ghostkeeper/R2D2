@@ -5,6 +5,7 @@
 #You should have received a copy of the GNU Affero General Public License along with this library. If not, see <https://gnu.org/licenses/>.
 
 import cura.CuraApplication #Various hooks into Cura.
+import cura.Settings.ExtruderManager #To get the currently active extruder.
 import cura.Stages.CuraStage #We're implementing a Cura stage.
 import os.path #To find the QML components.
 import UM.PluginRegistry #To find resources in the plug-in folder.
@@ -48,6 +49,7 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 			if node.getMeshData():
 				scene_hash += node.getMeshData().getHash()
 		this_print.set_model_hash(scene_hash)
+		this_print.set_evaluated_extruder(cura.Settings.ExtruderManager.ExtruderManager.getInstance().activeExtruderIndex)
 		for extruder_index in application.getGlobalContainerStack().extruders:
 			extruder_train = application.getGlobalContainerStack().extruders[extruder_index]
 			extruder_index = int(extruder_index)
