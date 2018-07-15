@@ -37,7 +37,7 @@ class Prints(UM.Qt.ListModel.ListModel):
 		:param print: The print to add to the database.
 		"""
 		self.prints.append(print)
-		if self.current_printer == print.printer_type:
+		if self.current_printer == print.printer_type: #Only need to update if the print would currently be displayed.
 			extruder = print.extruder(print.evaluated_extruder)
 			if self.current_nozzle == extruder["nozzle"] and self.current_material == extruder["material"]:
 				self._update()
@@ -55,4 +55,16 @@ class Prints(UM.Qt.ListModel.ListModel):
 		return Prints.inst
 
 	def _update(self):
-		pass #TODO
+		"""
+		Updates the list of prints exposed to QML.
+		"""
+		items = []
+		for print in self.prints:
+			extruder = print.extruder(print.evaluated_extruder)
+			#Only show prints relevant to the current set-up.
+			if self.current_printer == print.printer_type and self.current_nozzle == extruder["nozzle"] and self.current_material == extruder["material"]:
+				items.append({
+					"name": print.name,
+					"time_date": print.time_date
+				})
+		self.setItems(items)
