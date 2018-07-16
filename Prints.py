@@ -52,11 +52,15 @@ class Prints(UM.Qt.ListModel.ListModel):
 				self._update()
 
 	@staticmethod
-	def get_instance():
+	def get_instance(*args, **kwargs):
 		"""
 		Get an instance of this class.
 
 		This implements the singleton pattern.
+
+		The function accepts parameters because it is called from PyQt as well
+		but those parameters are ignored because we don't need the QML engine
+		or anything like that.
 		:return: An instance of this class.
 		"""
 		if Prints.inst is None:
