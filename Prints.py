@@ -14,8 +14,7 @@ class Prints(UM.Qt.ListModel.ListModel):
 	Displays a list of the prints that this system has previously made.
 	"""
 
-	NameRole = PyQt5.QtCore.Qt.UserRole + 1
-	TimeDateRole = PyQt5.QtCore.Qt.UserRole + 2
+	PrintRole = PyQt5.QtCore.Qt.UserRole + 1
 
 	inst = None
 
@@ -24,8 +23,7 @@ class Prints(UM.Qt.ListModel.ListModel):
 		Adds the role names to itself.
 		"""
 		super().__init__(parent)
-		self.addRoleName(self.NameRole, "name")
-		self.addRoleName(self.TimeDateRole, "time_date")
+		self.addRoleName(self.PrintRole, "print")
 
 		self.prints = [] #A list of all prints.
 
@@ -96,7 +94,6 @@ class Prints(UM.Qt.ListModel.ListModel):
 			#Only show prints relevant to the current set-up.
 			if current_printer == prt.printer_type and current_nozzle == extruder["nozzle"] and current_material == extruder["material"]:
 				items.append({
-					"name": prt.name,
-					"time_date": prt.time_date
+					"print": prt
 				})
 		self.setItems(items)
