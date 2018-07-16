@@ -7,6 +7,8 @@ import cura.Settings.MachineManager #To get the currently active material and no
 import PyQt5.QtCore
 import UM.Qt.ListModel #To expose a list to QML.
 
+from . import Print
+
 class Prints(UM.Qt.ListModel.ListModel):
 	"""
 	Displays a list of the prints that this system has previously made.
@@ -26,6 +28,8 @@ class Prints(UM.Qt.ListModel.ListModel):
 		self.addRoleName(self.TimeDateRole, "time_date")
 
 		self.prints = [] #A list of all prints.
+
+		self._selected_print = None #The print that is currently selected.
 
 		#Link some signals to update the view at appropriate times.
 		application = cura.CuraApplication.CuraApplication.getInstance()
@@ -58,6 +62,21 @@ class Prints(UM.Qt.ListModel.ListModel):
 		if Prints.inst is None:
 			Prints.inst = Prints()
 		return Prints.inst
+
+	def set_selected_print(self, selected_print):
+		"""
+		Changes the selection for the currently evaluating print.
+		:param selected_print: The newly selected print.
+		"""
+		self._selected_print = selected_print
+
+	@PyQt5.QtCore.pyqtProperty(Print, fset=set_selected_print)
+	def selected_print(self):
+		"""
+		Gets the print that is currently being evaluated.
+		:return: The print that is currently being evaluated.
+		"""
+		return self._selected_print
 
 	def _update(self):
 		"""
