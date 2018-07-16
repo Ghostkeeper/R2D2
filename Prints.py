@@ -65,14 +65,17 @@ class Prints(UM.Qt.ListModel.ListModel):
 			Prints.inst = Prints()
 		return Prints.inst
 
+	selected_print_changed = PyQt5.QtCore.pyqtSignal()
+
 	def set_selected_print(self, selected_print):
 		"""
 		Changes the selection for the currently evaluating print.
 		:param selected_print: The newly selected print.
 		"""
 		self._selected_print = selected_print
+		self.selected_print_changed.emit()
 
-	@PyQt5.QtCore.pyqtProperty(Print.Print, fset=set_selected_print)
+	@PyQt5.QtCore.pyqtProperty(Print.Print, fset=set_selected_print, notify=selected_print_changed)
 	def selected_print(self):
 		"""
 		Gets the print that is currently being evaluated.
