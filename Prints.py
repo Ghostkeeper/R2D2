@@ -70,7 +70,7 @@ class Prints(UM.Qt.ListModel.ListModel):
 		"""
 		self._selected_print = selected_print
 
-	@PyQt5.QtCore.pyqtProperty(Print, fset=set_selected_print)
+	@PyQt5.QtCore.pyqtProperty(Print.Print, fset=set_selected_print)
 	def selected_print(self):
 		"""
 		Gets the print that is currently being evaluated.
