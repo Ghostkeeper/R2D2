@@ -28,6 +28,22 @@ class Print(PyQt5.QtCore.QObject):
 		self._evaluation = {} #All known evaluation entries. Evaluation entries that are unknown are left out.
 		self.save()
 
+	@staticmethod
+	def load(file_path):
+		result = Print()
+		with open(file_path) as f:
+			json_document = json.load(f)
+		#Careful not to use the setters for these because that will trigger a save, which might overwrite the file.
+		result._name = json_document["name"]
+		result._time_date = json_document["time_date"]
+		result._printer_type = json_document["printer_type"]
+		result._evaluated_extruder = json_document["evaluated_extruder"]
+		result._model_hash = json_document["model_hash"]
+		result._extruders = json_document["extruders"]
+		result._evaluation = json_document["evaluation"]
+
+		return result
+
 	def set_name(self, new_name):
 		"""
 		Sets the print job name.
