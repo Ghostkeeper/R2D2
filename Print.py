@@ -1,7 +1,11 @@
 #Plug-in to gather after-print feedback to tune your profiles, optimising for certain intent.
 #Copyright (C) 2018 Ghostkeeper
 
+import json #To serialise this print to JSON.
+import os.path #To find a place to save the print to file.
 import PyQt5.QtCore #This object's fields are accessible from QML.
+import shutil #To move files if we rename this print.
+import UM.Resources #To save this print to file.
 
 class Print(PyQt5.QtCore.QObject):
 	"""
@@ -28,7 +32,10 @@ class Print(PyQt5.QtCore.QObject):
 		Sets the print job name.
 		:param new_name: The new print job name.
 		"""
+		old_file_path = self.file_path()
 		self._name = new_name
+		new_file_path = self.file_path()
+		shutil.move(old_file_path, new_file_path) #Changing the name causes the file name to change as well. We must move it.
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_name)
 	def name(self):
@@ -43,7 +50,10 @@ class Print(PyQt5.QtCore.QObject):
 		Sets the time and date that the print was made at.
 		:param new_time_date: The new time and date to remember.
 		"""
+		old_file_path = self.file_path()
 		self._time_date = new_time_date
+		new_file_path = self.file_path()
+		shutil.move(old_file_path, new_file_path) #Changing the time and date causes the file name to change as well. We must move it.
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_time_date)
 	def time_date(self):
