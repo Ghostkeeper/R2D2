@@ -26,6 +26,7 @@ class Print(PyQt5.QtCore.QObject):
 		self._model_hash = 0
 		self._extruders = [] #For each extruder, a dictionary containing "nozzle", "material", and all settings for that extruder (including global settings).
 		self._evaluation = {} #All known evaluation entries. Evaluation entries that are unknown are left out.
+		self.save()
 
 	def set_name(self, new_name):
 		"""
@@ -36,6 +37,7 @@ class Print(PyQt5.QtCore.QObject):
 		self._name = new_name
 		new_file_path = self.file_path()
 		shutil.move(old_file_path, new_file_path) #Changing the name causes the file name to change as well. We must move it.
+		self.save()
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_name)
 	def name(self):
@@ -54,6 +56,7 @@ class Print(PyQt5.QtCore.QObject):
 		self._time_date = new_time_date
 		new_file_path = self.file_path()
 		shutil.move(old_file_path, new_file_path) #Changing the time and date causes the file name to change as well. We must move it.
+		self.save()
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_time_date)
 	def time_date(self):
@@ -69,6 +72,7 @@ class Print(PyQt5.QtCore.QObject):
 		:param new_printer_type: The type of printer that was used.
 		"""
 		self._printer_type = new_printer_type
+		self.save()
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_printer_type)
 	def printer_type(self):
@@ -84,6 +88,7 @@ class Print(PyQt5.QtCore.QObject):
 		:param new_model_hash: The alleged hash of the scene that was printed.
 		"""
 		self._model_hash = new_model_hash
+		self.save()
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_model_hash)
 	def model_hash(self):
@@ -102,6 +107,7 @@ class Print(PyQt5.QtCore.QObject):
 		:param new_evaluated_extruder: The extruder to evaluate.
 		"""
 		self._evaluated_extruder = new_evaluated_extruder
+		self.save()
 
 	@PyQt5.QtCore.pyqtProperty(int, fset=set_evaluated_extruder)
 	def evaluated_extruder(self):
@@ -122,6 +128,7 @@ class Print(PyQt5.QtCore.QObject):
 		while len(self._extruders) <= extruder_nr:
 			self._extruders.append({})
 		self._extruders[extruder_nr] = new_extruder
+		self.save()
 
 	@PyQt5.QtCore.pyqtSlot(int, result="QVariantMap")
 	def extruder(self, extruder):
