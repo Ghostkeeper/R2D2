@@ -4,8 +4,10 @@
 import cura.CuraApplication #Various hooks into Cura.
 import cura.Settings.ExtruderManager #To get the currently active extruder.
 import cura.Settings.MachineManager #To get the currently active material and nozzle.
+import os #To find the previously saved prints on the disk.
 import PyQt5.QtCore
 import UM.Qt.ListModel #To expose a list to QML.
+import UM.Resources #To find previously saved prints in the data directory.
 
 from . import Print
 
@@ -35,6 +37,14 @@ class Prints(UM.Qt.ListModel.ListModel):
 		application.getMachineManager().activeVariantChanged.connect(self._update)
 		application.getMachineManager().activeMaterialChanged.connect(self._update)
 		self._update()
+
+		#Load all prints that were saved in previous sessions.
+		store_directory = os.path.join(UM.Resources.Resources.getDataStoragePath(), "print_evaluations")
+		if not os.path.exists(store_directory):
+			os.mkdir(store_directory) #Create if it didn't exist yet.
+		for file_name in os.listdir(os.path.join(UM.Resources.Resources.getDataStoragePath(), "print_evaluations")):
+			file_path = os.path.join(store_directory, file_name)
+			self.add_print(Print.Print.load(file_path))
 
 	def add_print(self, print):
 		"""
