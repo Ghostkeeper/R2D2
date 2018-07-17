@@ -134,3 +134,30 @@ class Print(PyQt5.QtCore.QObject):
 		submitted for the print, if any.
 		"""
 		return self._evaluation
+
+	def file_path(self):
+		"""
+		Generates the current file path if this were to be saved to disk.
+		:return: The current file path of this print on disk.
+		"""
+		return os.path.join(UM.Resources.Resources.getDataStoragePath(), "print_evaluations", self._time_date + "_" + self._name + ".json")
+
+	def save(self):
+		"""
+		Saves this print to disk.
+
+		This needs to be called whenever the print is modified.
+		"""
+		json_document = {
+			"name": self._name,
+			"time_date": self._time_date,
+			"printer_type": self._printer_type,
+			"evaluated_extruder": self._evaluated_extruder,
+			"model_hash": self._model_hash,
+			"extruders": self._extruders,
+			"evaluation": self._evaluation
+		}
+
+		file_path = self.file_path()
+		with open(file_path, "w") as f:
+			json.dump(json_document, f)
