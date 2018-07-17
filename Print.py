@@ -1,6 +1,7 @@
 #Plug-in to gather after-print feedback to tune your profiles, optimising for certain intent.
 #Copyright (C) 2018 Ghostkeeper
 
+import datetime #To get the current time and date when creating a new print.
 import json #To serialise this print to JSON.
 import os.path #To find a place to save the print to file.
 import PyQt5.QtCore #This object's fields are accessible from QML.
@@ -20,7 +21,7 @@ class Print(PyQt5.QtCore.QObject):
 		super().__init__(parent)
 
 		self._name = "unknown"
-		self._time_date = "0000-0-0/0:00:00"
+		self._time_date = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
 		self._printer_type = "unknown"
 		self._evaluated_extruder = 0
 		self._model_hash = 0
