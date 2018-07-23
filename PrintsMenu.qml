@@ -18,7 +18,7 @@ Menu
 		{
 			text: model.print.name
 			checkable: true
-			checked: Prints.selected_print != null && model.print.time_date == Prints.selected_print.time_date
+			checked: Prints.selected_print == model.print
 			exclusiveGroup: prints_group
 			onTriggered: {
 				Prints.selected_print = model.print;
