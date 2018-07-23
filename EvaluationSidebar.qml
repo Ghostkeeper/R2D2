@@ -6,6 +6,8 @@ import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import UM 1.2 as UM //For the theme.
 
+import R2D2 1.0
+
 Rectangle {
 	id: base
 	color: UM.Theme.getColor("sidebar")
@@ -43,7 +45,7 @@ Rectangle {
 				Label {
 					id: print_selection
 					color: UM.Theme.getColor("sidebar_header_text_active")
-					text: catalog.i18nc("@label", "No print selected")
+					text: Prints.selected_print ? Prints.selected_print.name : catalog.i18nc("@label", "No print selected")
 					elide: Text.ElideRight
 					font: UM.Theme.getFont("medium_bold")
 					anchors {
