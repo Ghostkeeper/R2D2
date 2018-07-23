@@ -93,6 +93,7 @@ Rectangle {
 				showAll: true
 			}
 			delegate: Loader {
+				id: setting_loader
 				width: parent.width
 				height: {
 					if(provider.properties.enabled === "True" && model.type != undefined) {
@@ -120,11 +121,11 @@ Rectangle {
 
 				onLoaded: {
 					//Disable some of the normal buttons and features of the settings list.
-					settingLoader.item.showRevertButton = false;
-					settingLoader.item.showInheritButton = false;
-					settingLoader.item.showLinkedSettingIcon = false;
-					settingLoader.item.doDepthIndentation = false;
-					settingLoader.item.doQualityUserSettingEmphasis = false;
+					setting_loader.item.showRevertButton = false;
+					setting_loader.item.showInheritButton = false;
+					setting_loader.item.showLinkedSettingIcon = false;
+					setting_loader.item.doDepthIndentation = false;
+					setting_loader.item.doQualityUserSettingEmphasis = false;
 				}
 
 				sourceComponent: {
