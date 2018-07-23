@@ -1,0 +1,229 @@
+{
+	"name": "Intents",
+	"version": 2,
+	"metadata": {},
+	"settings": {
+		"print_time": {
+			"label": "Print Time",
+			"description": "How long the printer is taking to produce the item.",
+			"unit": "s",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0"
+		},
+		"dimensional_accuracy": {
+			"label": "Dimensional Error",
+			"description": "How far off the size of the final print is from the intended size.",
+			"unit": "%",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0"
+		},
+		"strength": {
+			"label": "Strength",
+			"description": "How strong the print is, relative to the same model printed.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"underextrusion": {
+			"label": "Underextrusion",
+			"description": "How much underextrusion was visible in the model.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"topography": {
+			"label": "Topography",
+			"description": "How visible the borders between the layers are, seen from the top.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"pillowing": {
+			"label": "Pillowing",
+			"description": "How much visible pillowing occurred in the top skin.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"surface_scars": {
+			"label": "Surface Scars",
+			"description": "How much visible scarring there is on the surface due to travel moves.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"top_skin_overhang": {
+			"label": "Top Skin Overhang",
+			"description": "How bad the skin is sagging due to insufficient support from infill.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"wall_smoothness": {
+			"label": "Wall Smoothness",
+			"description": "Generally how smooth the walls are (where they need to be smooth).",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"loss_of_detail": {
+			"label": "Loss of Detail",
+			"description": "How much detail was lost in the end result.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"banding": {
+			"label": "Banding",
+			"description": "How much difference in colour is visible between different layers.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"infill_shinethrough": {
+			"label": "Infill Shine-through",
+			"description": "How visible the infill was shining through the walls.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"ringing": {
+			"label": "Ringing",
+			"description": "How much ringing is visible on the sides of the walls.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"blips": {
+			"label": "Blips",
+			"description": "How many blips are visible on the surface.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"stringing": {
+			"label": "Stringing",
+			"description": "How much stringing there is in places where neat travel moves should've been.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"z_scar": {
+			"label": "Z Scar",
+			"description": "How visible the Z scar is.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"overhang_sagging": {
+			"label": "Overhang Sagging",
+			"description": "How bad the overhung areas of the print are sagging.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"support_scarring": {
+			"label": "Support Scarring",
+			"description": "How bad the scars are that are left by support.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"elephant_feet": {
+			"label": "Elephant Feet",
+			"description": "How much wider the bottom of the print was than the rest of the print.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"overheating": {
+			"label": "Overheating",
+			"description": "How much the model deformed due to overheating.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"post_processing": {
+			"label": "Post Processing Work",
+			"description": "How much post-processing work needed to be done.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"layer_shift": {
+			"label": "Layer Shift",
+			"description": "How much layer shifting occurred.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"splitting": {
+			"label": "Splitting",
+			"description": "How much the layers split apart.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"warping": {
+			"label": "Warping",
+			"description": "How much warping horizontal occurred. Be sure to account for the fact that large prints warp more.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"curling": {
+			"label": "Curling",
+			"description": "How much vertical warping (curling) occurred.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"bed_release": {
+			"label": "Bed Release",
+			"description": "Lack of bed adhesion. Did the print get loose from the bed?",
+			"type": "bool",
+			"default_value": false
+		},
+		"clogging": {
+			"label": "Clogging",
+			"description": "How badly the nozzle clogged due to this print.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		},
+		"printer_damage": {
+			"label": "Printer Damage",
+			"description": "How badly damaged the printer was due to this print.",
+			"type": "float",
+			"default_value": 0,
+			"minimum_value": "0",
+			"maximum_value": "10"
+		}
+	}
+}
