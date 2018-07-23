@@ -1,6 +1,7 @@
 //Plug-in to gather after-print feedback to tune your profiles, optimising for certain intent.
 //Copyright (C) 2018 Ghostkeeper
 
+import Cura 1.0 as Cura
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
@@ -19,6 +20,7 @@ Rectangle {
 
 	//Print selection menu.
 	ToolButton {
+		id: print_selection
 		anchors {
 			left: parent.left
 			right: parent.right
@@ -43,7 +45,6 @@ Rectangle {
 				}
 
 				Label {
-					id: print_selection
 					color: UM.Theme.getColor("sidebar_header_text_active")
 					text: Prints.selected_print ? Prints.selected_print.name : catalog.i18nc("@label", "No print selected")
 					elide: Text.ElideRight
@@ -56,7 +57,6 @@ Rectangle {
 				}
 
 				UM.RecolorImage {
-					id: down_arrow
 					anchors {
 						right: parent.right
 						rightMargin: UM.Theme.getSize("default_margin").width
@@ -72,5 +72,107 @@ Rectangle {
 			}
 		}
 		menu: PrintsMenu {}
+	}
+
+	//The evaluation form.
+	ScrollView {
+		anchors {
+			top: print_selection.bottom
+			bottom: parent.bottom
+			left: parent.left
+			right: parent.right
+		}
+		visible: Prints.selected_print != null
+		style: UM.Theme.styles.scrollview
+
+		ListView {
+			spacing: UM.Theme.getSize("default_lining").height
+			model: UM.SettingDefinitionsModel {
+				id: definitions_model
+				containerId: "intents"
+				showAll: true
+			}
+			delegate: Loader {
+				width: parent.width
+				height: {
+					if(provider.properties.enabled === "True" && model.type != undefined) {
+						return UM.Theme.getSize("section").height;
+					} else {
+						return 0;
+					}
+				}
+				Behavior on height {
+					NumberAnimation {
+						duration: 100
+					}
+				}
+				opacity: provider.properties.enabled == "True" ? 1 : 0
+				Behavior on opacity {
+					NumberAnimation {
+						duration: 100
+					}
+				}
+				enabled: opacity > 0
+				property var definition: model
+				property var settingDefinitionsModel: definitionsModel
+				property var propertyProvider: provider
+				asynchronous: model.type != "enum" && model.type != "extruder"
+
+				onLoaded: {
+					//Disable some of the normal buttons and features of the settings list.
+					settingLoader.item.showRevertButton = false;
+					settingLoader.item.showInheritButton = false;
+					settingLoader.item.showLinkedSettingIcon = false;
+					settingLoader.item.doDepthIndentation = false;
+					settingLoader.item.doQualityUserSettingEmphasis = false;
+				}
+
+				sourceComponent: {
+					switch(model.type) {
+						case "int":
+						case "float":
+						case "str":
+							return settingTextField;
+						case "enum":
+							return settingComboBox;
+						case "bool":
+							return settingCheckBox;
+						case "category":
+							return settingCategory;
+						default:
+							return settingUnknown;
+					}
+				}
+
+				UM.SettingPropertyProvider {
+					id: provider
+					containerStackId: "intents"
+					key: model.key ? model.key : "None"
+					watchedProperties: ["value", "enabled", "state", "validationState"]
+					storeIndex: 0
+				}
+			}
+		}
+	}
+
+	Component {
+		id: settingTextField
+		Cura.SettingTextField {}
+	}
+	Component {
+		id: settingComboBox
+		Cura.SettingComboBox {}
+	}
+	Component {
+		id: settingCheckBox
+		Cura.SettingCheckBox {}
+	}
+	Component {
+		id: settingCategory
+		Cura.SettingCategory {}
+	}
+	Component {
+		id: settingUnknown
+		Cura.SettingUnknown {}
 	}
 }
