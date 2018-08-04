@@ -5,7 +5,6 @@ import datetime #To get the current time and date when creating a new print.
 import json #To serialise this print to JSON.
 import os.path #To find a place to save the print to file.
 import PyQt5.QtCore #This object's fields are accessible from QML.
-import shutil #To move files if we rename this print.
 import UM.Resources #To save this print to file.
 
 class Print(PyQt5.QtCore.QObject):
@@ -27,7 +26,6 @@ class Print(PyQt5.QtCore.QObject):
 		self._model_hash = 0
 		self._extruders = [] #For each extruder, a dictionary containing "nozzle", "material", and all settings for that extruder (including global settings).
 		self._evaluation = {} #All known evaluation entries. Evaluation entries that are unknown are left out.
-		self.save()
 
 	@staticmethod
 	def load(file_path):
@@ -52,9 +50,9 @@ class Print(PyQt5.QtCore.QObject):
 		"""
 		old_file_path = self.file_path()
 		self._name = new_name
-		new_file_path = self.file_path()
-		shutil.move(old_file_path, new_file_path) #Changing the name causes the file name to change as well. We must move it.
 		self.save()
+		if os.path.exists(old_file_path):
+			os.remove(old_file_path) #Changing the name causes the file name to change as well. We must move it.
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_name)
 	def name(self):
@@ -71,9 +69,9 @@ class Print(PyQt5.QtCore.QObject):
 		"""
 		old_file_path = self.file_path()
 		self._time_date = new_time_date
-		new_file_path = self.file_path()
-		shutil.move(old_file_path, new_file_path) #Changing the time and date causes the file name to change as well. We must move it.
 		self.save()
+		if os.path.exists(old_file_path):
+			os.remove(old_file_path) #Changing the time and date causes the file name to change as well. We must move it.
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_time_date)
 	def time_date(self):
