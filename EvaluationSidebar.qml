@@ -117,6 +117,7 @@ Rectangle {
 				property var definition: model
 				property var settingDefinitionsModel: definitionsModel
 				property var propertyProvider: provider
+				property var globalPropertyProvider: inherit_stack_provider
 				asynchronous: model.type != "enum" && model.type != "extruder"
 
 				onLoaded: {
@@ -151,6 +152,12 @@ Rectangle {
 					key: model.key ? model.key : "None"
 					watchedProperties: ["value", "enabled", "state", "validationState"]
 					storeIndex: 0
+				}
+				UM.SettingPropertyProvider {
+					id: inherit_stack_provider
+					containerStackId: Cura.MachineManager.activeManchineId
+					key: model.key ? model.key : "None"
+					watchedProperties: ["limit_to_extruder"]
 				}
 			}
 		}
