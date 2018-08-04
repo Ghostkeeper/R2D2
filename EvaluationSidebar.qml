@@ -155,7 +155,7 @@ Rectangle {
 				}
 				UM.SettingPropertyProvider {
 					id: inherit_stack_provider
-					containerStackId: Cura.MachineManager.activeManchineId
+					containerStackId: Cura.MachineManager.activeMachineId
 					key: model.key ? model.key : "None"
 					watchedProperties: ["limit_to_extruder"]
 				}
