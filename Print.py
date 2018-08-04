@@ -43,6 +43,8 @@ class Print(PyQt5.QtCore.QObject):
 
 		return result
 
+	name_changed = PyQt5.QtCore.pyqtSignal()
+
 	def set_name(self, new_name):
 		"""
 		Sets the print job name.
@@ -53,8 +55,9 @@ class Print(PyQt5.QtCore.QObject):
 		self.save()
 		if os.path.exists(old_file_path):
 			os.remove(old_file_path) #Changing the name causes the file name to change as well. We must move it.
+		self.name_changed.emit(new_name)
 
-	@PyQt5.QtCore.pyqtProperty(str, fset=set_name)
+	@PyQt5.QtCore.pyqtProperty(str, fset=set_name, notify=name_changed)
 	def name(self):
 		"""
 		The print job name.
