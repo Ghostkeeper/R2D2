@@ -115,7 +115,7 @@ Rectangle {
 				}
 				enabled: opacity > 0
 				property var definition: model
-				property var settingDefinitionsModel: definitionsModel
+				property var settingDefinitionsModel: definitions_model
 				property var propertyProvider: provider
 				property var globalPropertyProvider: inherit_stack_provider
 				asynchronous: model.type != "enum" && model.type != "extruder"
