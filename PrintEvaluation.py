@@ -79,6 +79,7 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		"""
 		registry = UM.Settings.ContainerRegistry.ContainerRegistry.getInstance()
 		intents_stack = UM.Settings.ContainerStack.ContainerStack("intents_stack")
+		intents_stack.setDirty(False)
 		registry.addContainer(intents_stack)
 
 		intents_container = UM.Settings.DefinitionContainer.DefinitionContainer("intents")
@@ -90,6 +91,7 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 
 		intents_changes = UM.Settings.InstanceContainer.InstanceContainer("intents_changes")
 		intents_changes.setDefinition(intents_container.getId())
+		intents_changes.setDirty(False)
 		registry.addContainer(intents_changes)
 		intents_stack.addContainer(intents_changes)
 
