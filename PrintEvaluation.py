@@ -50,7 +50,7 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		print_info = application.getPrintInformation()
 		this_print.set_name(print_info.jobName)
 		this_print.set_printer_type(application.getGlobalContainerStack().definition.getId())
-		this_print.evaluation()["duration"] = sum((int(d) for d in print_info.printTimes().values())) #We already fill this information in beforehand from the estimate that Cura gives.
+		this_print.evaluation()["print_time"] = sum((int(d) for d in print_info.printTimes().values())) #We already fill this information in beforehand from the estimate that Cura gives.
 		scene_hash = ""
 		for node in UM.Scene.Iterator.DepthFirstIterator.DepthFirstIterator(application.getController().getScene().getRoot()):
 			if node.getMeshData():
