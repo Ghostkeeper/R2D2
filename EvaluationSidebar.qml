@@ -94,7 +94,12 @@ Rectangle {
 			}
 			delegate: Loader {
 				id: setting_loader
-				width: parent.width
+				anchors {
+					left: parent.left
+					leftMargin: UM.Theme.getSize("sidebar_margin").width
+					right: parent.right
+					rightMargin: UM.Theme.getSize("sidebar_margin").width
+				}
 				height: {
 					if(provider.properties.enabled === "True" && model.type != undefined) {
 						return UM.Theme.getSize("section").height;
