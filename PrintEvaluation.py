@@ -87,8 +87,8 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		"""
 		if property != "value":
 			return
-		print = Prints.Prints.get_instance().selected_print
-		print.evaluation[key] = self.intents_stack.getProperty(key, "value") #Update this new property in the current print.
+		prnt = Prints.Prints.get_instance().selected_print
+		prnt.evaluation()[key] = self.intents_stack.getProperty(key, "value") #Update this new property in the current print.
 
 	def _register_container(self):
 		"""
@@ -98,7 +98,7 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		registry = UM.Settings.ContainerRegistry.ContainerRegistry.getInstance()
 		self.intents_stack = UM.Settings.ContainerStack.ContainerStack("intents_stack")
 		self.intents_stack.setDirty(False)
-		self.intents_stack.propertiesChanged.connect(self._on_evaluation_changed)
+		self.intents_stack.propertyChanged.connect(self._on_evaluation_changed)
 		registry.addContainer(self.intents_stack)
 
 		intents_container = UM.Settings.DefinitionContainer.DefinitionContainer("intents")
