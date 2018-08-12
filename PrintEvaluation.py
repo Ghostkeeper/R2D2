@@ -87,6 +87,7 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		stack with intents.
 		"""
 		prnt = Prints.Prints.get_instance().selected_print
+		self.intents_stack.getTop().clear()
 		for intent in prnt.evaluation():
 			self.intents_stack.getTop().setProperty(intent, "value", prnt.evaluation()[intent])
 
