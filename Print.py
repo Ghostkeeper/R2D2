@@ -20,7 +20,7 @@ class Print(PyQt5.QtCore.QObject):
 		super().__init__(parent)
 
 		self._name = "unknown"
-		self._time_date = datetime.datetime.now().strftime("%y%m%d-%H%M%S")
+		self._time_date = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 		self._printer_type = "unknown"
 		self._evaluated_extruder = 0
 		self._model_hash = 0
