@@ -55,7 +55,7 @@ class Print(PyQt5.QtCore.QObject):
 		self.save()
 		if os.path.exists(old_file_path):
 			os.remove(old_file_path) #Changing the name causes the file name to change as well. We must move it.
-		self.name_changed.emit(new_name)
+		self.name_changed.emit()
 
 	@PyQt5.QtCore.pyqtProperty(str, fset=set_name, notify=name_changed)
 	def name(self):
