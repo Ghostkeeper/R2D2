@@ -11,6 +11,7 @@ import UM.Scene.Iterator.DepthFirstIterator #To get the scene nodes for the scen
 import UM.Settings.ContainerRegistry #To register the list of intents as setting definitions.
 import UM.Settings.ContainerStack #To load the list of intents as settings.
 import UM.Settings.DefinitionContainer #To load the list of intents as setting definitions.
+import UM.Settings.InstanceContainer #To allow changing the intents.
 
 from . import Print #To create a new entry in the prints database.
 from . import Prints #To add prints to the database.
@@ -83,8 +84,13 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		registry = UM.Settings.ContainerRegistry.ContainerRegistry.getInstance()
 		registry.addContainer(intents_container)
 
+		intents_changes = UM.Settings.InstanceContainer.InstanceContainer("intents_changes")
+		intents_changes.setDefinition(intents_container.getId())
+		registry.addContainer(intents_changes)
+
 		intents_stack = UM.Settings.ContainerStack.ContainerStack("intents_stack")
 		intents_stack.addContainer(intents_container)
+		intents_stack.addContainer(intents_changes)
 		registry.addContainer(intents_stack)
 
 	def _register_qml_types(self):
