@@ -89,6 +89,7 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 			return
 		prnt = Prints.Prints.get_instance().selected_print
 		prnt.evaluation()[key] = self.intents_stack.getProperty(key, "value") #Update this new property in the current print.
+		prnt.save()
 
 	def _register_container(self):
 		"""
