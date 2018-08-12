@@ -25,6 +25,9 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 	def __init__(self, parent=None):
 		super().__init__(parent)
 
+		self.intents_stack = None
+
+		#Interoperatability with all the signals going 'round in this place.
 		application = cura.CuraApplication.CuraApplication.getInstance()
 		application.engineCreatedSignal.connect(self._add_sidebar_panel)
 		application.engineCreatedSignal.connect(self._register_qml_types)
@@ -72,28 +75,44 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		panel = os.path.join(UM.PluginRegistry.PluginRegistry.getInstance().getPluginPath("R2D2"), "EvaluationSidebar.qml")
 		self.addDisplayComponent("sidebar", panel)
 
+	def _on_evaluation_changed(self, key, property):
+		"""
+		Triggered when the user changes one of the evaluation entries.
+
+		When this happens, we must update the evaluation in the currently
+		active print entry.
+		:param key: The entry that was changed.
+		:param property: The property of the setting that was changed.
+		Normally this can only be the "value" property.
+		"""
+		if property != "value":
+			return
+		print = Prints.Prints.get_instance().selected_print
+		print.evaluation[key] = self.intents_stack.getProperty(key, "value") #Update this new property in the current print.
+
 	def _register_container(self):
 		"""
 		Adds a container to the container registry that defines all the
 		possible intents and what the evaluation form can accept as values.
 		"""
 		registry = UM.Settings.ContainerRegistry.ContainerRegistry.getInstance()
-		intents_stack = UM.Settings.ContainerStack.ContainerStack("intents_stack")
-		intents_stack.setDirty(False)
-		registry.addContainer(intents_stack)
+		self.intents_stack = UM.Settings.ContainerStack.ContainerStack("intents_stack")
+		self.intents_stack.setDirty(False)
+		self.intents_stack.propertiesChanged.connect(self._on_evaluation_changed)
+		registry.addContainer(self.intents_stack)
 
 		intents_container = UM.Settings.DefinitionContainer.DefinitionContainer("intents")
 		with open(os.path.join(UM.PluginRegistry.PluginRegistry.getInstance().getPluginPath("R2D2"), "intents.def.json")) as f:
 			intents_container_contents = f.read()
 			intents_container.deserialize(intents_container_contents, "intents.def.json")
 		registry.addContainer(intents_container)
-		intents_stack.addContainer(intents_container)
+		self.intents_stack.addContainer(intents_container)
 
 		intents_changes = UM.Settings.InstanceContainer.InstanceContainer("intents_changes")
 		intents_changes.setDefinition(intents_container.getId())
 		intents_changes.setDirty(False)
 		registry.addContainer(intents_changes)
-		intents_stack.addContainer(intents_changes)
+		self.intents_stack.addContainer(intents_changes)
 
 	def _register_qml_types(self):
 		"""
