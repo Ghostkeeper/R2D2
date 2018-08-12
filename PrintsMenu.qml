@@ -16,7 +16,7 @@ Menu
 		model: Prints
 		MenuItem
 		{
-			text: model.print.name
+			text: model.print.name + " - " + model.print.time_date
 			checkable: true
 			checked: Prints.selected_print == model.print
 			exclusiveGroup: prints_group

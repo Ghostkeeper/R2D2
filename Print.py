@@ -65,6 +65,8 @@ class Print(PyQt5.QtCore.QObject):
 		"""
 		return self._name
 
+	time_date_changed = PyQt5.QtCore.pyqtSignal()
+
 	def set_time_date(self, new_time_date):
 		"""
 		Sets the time and date that the print was made at.
@@ -76,7 +78,7 @@ class Print(PyQt5.QtCore.QObject):
 		if os.path.exists(old_file_path):
 			os.remove(old_file_path) #Changing the time and date causes the file name to change as well. We must move it.
 
-	@PyQt5.QtCore.pyqtProperty(str, fset=set_time_date)
+	@PyQt5.QtCore.pyqtProperty(str, fset=set_time_date, notify=time_date_changed)
 	def time_date(self):
 		"""
 		The time and date that the print was made at.
