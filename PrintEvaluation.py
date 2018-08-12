@@ -9,6 +9,7 @@ import PyQt5.QtQml #To register QML components with the QML engine.
 import UM.PluginRegistry #To find resources in the plug-in folder.
 import UM.Scene.Iterator.DepthFirstIterator #To get the scene nodes for the scene hash.
 import UM.Settings.ContainerRegistry #To register the list of intents as setting definitions.
+import UM.Settings.ContainerStack #To load the list of intents as settings.
 import UM.Settings.DefinitionContainer #To load the list of intents as setting definitions.
 
 from . import Print #To create a new entry in the prints database.
@@ -79,7 +80,12 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		with open(os.path.join(UM.PluginRegistry.PluginRegistry.getInstance().getPluginPath("R2D2"), "intents.def.json")) as f:
 			intents_container_contents = f.read()
 			intents_container.deserialize(intents_container_contents, "intents.def.json")
-		UM.Settings.ContainerRegistry.ContainerRegistry.getInstance().addContainer(intents_container)
+		registry = UM.Settings.ContainerRegistry.ContainerRegistry.getInstance()
+		registry.addContainer(intents_container)
+
+		intents_stack = UM.Settings.ContainerStack.ContainerStack("intents_stack")
+		intents_stack.addContainer(intents_container)
+		registry.addContainer(intents_stack)
 
 	def _register_qml_types(self):
 		"""

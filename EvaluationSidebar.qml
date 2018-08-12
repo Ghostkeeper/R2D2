@@ -148,7 +148,7 @@ Rectangle {
 
 				UM.SettingPropertyProvider {
 					id: provider
-					containerStackId: "intents"
+					containerStackId: "intents_stack"
 					key: model.key ? model.key : "None"
 					watchedProperties: ["value", "enabled", "state", "validationState"]
 					storeIndex: 0
