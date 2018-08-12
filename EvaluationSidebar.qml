@@ -1,11 +1,11 @@
 //Plug-in to gather after-print feedback to tune your profiles, optimising for certain intent.
 //Copyright (C) 2018 Ghostkeeper
 
-import Cura 1.0 as Cura
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 import UM 1.2 as UM //For the theme.
+import Cura 1.0 as Cura
 
 import R2D2 1.0
 
@@ -76,6 +76,7 @@ Rectangle {
 
 	//The evaluation form.
 	ScrollView {
+		id: evaluation_form
 		anchors {
 			top: print_selection.bottom
 			bottom: parent.bottom
@@ -155,7 +156,7 @@ Rectangle {
 					id: provider
 					containerStackId: "intents_stack"
 					key: model.key ? model.key : "None"
-					watchedProperties: ["value", "enabled", "state", "validationState"]
+					watchedProperties: ["value", "enabled", "state", "validationState", "label", "description"]
 					storeIndex: 0
 				}
 				UM.SettingPropertyProvider {
@@ -163,6 +164,17 @@ Rectangle {
 					containerStackId: Cura.MachineManager.activeMachineId
 					key: model.key ? model.key : "None"
 					watchedProperties: ["limit_to_extruder"]
+				}
+
+				Connections {
+					target: item
+					onShowTooltip: {
+						tooltip.text = "<b>" + provider.properties.label + "</b><br />" + provider.properties.description;
+						tooltip.show({x: -UM.Theme.getSize("default_arrow").width, y: evaluation_form.y + setting_loader.y + Math.round(setting_loader.height / 4)});
+					}
+					onHideTooltip: {
+						tooltip.hide();
+					}
 				}
 			}
 		}
@@ -187,5 +199,9 @@ Rectangle {
 	Component {
 		id: settingUnknown
 		Cura.SettingUnknown {}
+	}
+
+	Cura.SidebarTooltip {
+		id: tooltip
 	}
 }
