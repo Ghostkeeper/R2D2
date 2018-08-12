@@ -62,7 +62,8 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 			extruder_index = int(extruder_index)
 			settings = {}
 			for setting_key in extruder_train.getAllKeys():
-				settings[setting_key] = extruder_train.getProperty(setting_key, "value")
+				if not extruder_train.getProperty(setting_key, "children"):
+					settings[setting_key] = extruder_train.getProperty(setting_key, "value")
 			settings["nozzle"] = extruder_train.variant.getId()
 			settings["material"] = extruder_train.material.getId()
 			this_print.add_extruder(extruder_index, settings)
