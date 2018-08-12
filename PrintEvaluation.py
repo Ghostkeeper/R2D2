@@ -77,21 +77,21 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		Adds a container to the container registry that defines all the
 		possible intents and what the evaluation form can accept as values.
 		"""
+		registry = UM.Settings.ContainerRegistry.ContainerRegistry.getInstance()
+		intents_stack = UM.Settings.ContainerStack.ContainerStack("intents_stack")
+		registry.addContainer(intents_stack)
+
 		intents_container = UM.Settings.DefinitionContainer.DefinitionContainer("intents")
 		with open(os.path.join(UM.PluginRegistry.PluginRegistry.getInstance().getPluginPath("R2D2"), "intents.def.json")) as f:
 			intents_container_contents = f.read()
 			intents_container.deserialize(intents_container_contents, "intents.def.json")
-		registry = UM.Settings.ContainerRegistry.ContainerRegistry.getInstance()
 		registry.addContainer(intents_container)
+		intents_stack.addContainer(intents_container)
 
 		intents_changes = UM.Settings.InstanceContainer.InstanceContainer("intents_changes")
 		intents_changes.setDefinition(intents_container.getId())
 		registry.addContainer(intents_changes)
-
-		intents_stack = UM.Settings.ContainerStack.ContainerStack("intents_stack")
-		intents_stack.addContainer(intents_container)
 		intents_stack.addContainer(intents_changes)
-		registry.addContainer(intents_stack)
 
 	def _register_qml_types(self):
 		"""
