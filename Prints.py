@@ -102,7 +102,7 @@ class Prints(UM.Qt.ListModel.ListModel):
 		current_nozzle = active_extruder.variant.getId()
 		current_material = active_extruder.material.getId()
 		items = []
-		for prt in sorted(self.prints, key=lambda prnt: prnt.time_date):
+		for prt in reversed(sorted(self.prints, key=lambda prnt: prnt.time_date)):
 			extruder = prt.extruder(prt.evaluated_extruder)
 			#Only show prints relevant to the current set-up.
 			if current_printer == prt.printer_type and current_nozzle == extruder["nozzle"] and current_material == extruder["material"]:
