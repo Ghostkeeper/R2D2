@@ -75,6 +75,20 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		panel = os.path.join(UM.PluginRegistry.PluginRegistry.getInstance().getPluginPath("R2D2"), "EvaluationSidebar.qml")
 		self.addDisplayComponent("sidebar", panel)
 
+		#Make sure that the settings in the side bar are updated when switching prints.
+		Prints.Prints.get_instance().selected_print_changed.connect(self._load_from_selected_print)
+
+	def _load_from_selected_print(self):
+		"""
+		Called when the selected print changes.
+
+		This copies the evaluation within the selected print into the setting
+		stack with intents.
+		"""
+		prnt = Prints.Prints.get_instance().selected_print
+		for intent in prnt.evaluation():
+			self.intents_stack.getTop().setProperty(intent, "value", prnt.evaluation()[intent])
+
 	def _on_evaluation_changed(self, key, property):
 		"""
 		Triggered when the user changes one of the evaluation entries.
