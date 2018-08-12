@@ -195,4 +195,4 @@ class Print(PyQt5.QtCore.QObject):
 
 		file_path = self.file_path()
 		with open(file_path, "w") as f:
-			json.dump(json_document, f)
+			json.dump(json_document, f, indent="\t")
