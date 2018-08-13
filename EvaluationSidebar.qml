@@ -75,11 +75,54 @@ Rectangle {
 		menu: PrintsMenu {}
 	}
 
+	//Train button.
+	Button {
+		id: train_button
+		anchors {
+			top: print_selection.bottom
+			topMargin:  UM.Theme.getSize("sidebar_margin").height
+			left: parent.left
+			leftMargin: UM.Theme.getSize("sidebar_margin").width
+			right: parent.right
+			rightMargin: UM.Theme.getSize("sidebar_margin").width
+		}
+		text: "Train"
+		onClicked: {
+			print("This would trigger the training process.")
+		}
+
+		style: ButtonStyle {
+			background: Rectangle {
+				color: {
+					if(control.checked || control.pressed) {
+						return UM.Theme.getColor("action_button_active");
+					} else if(control.hovered) {
+						return UM.Theme.getColor("action_button_hovered");
+					} else {
+						return UM.Theme.getColor("action_button");
+					}
+				}
+				border {
+					color: {
+						if(control.checked || control.pressed) {
+							return UM.Theme.getColor("action_button_active_border");
+						} else if(control.hovered) {
+							return UM.Theme.getColor("action_button_hovered_border");
+						} else {
+							return UM.Theme.getColor("action_button_border");
+						}
+					}
+				}
+			}
+		}
+	}
+
 	//The evaluation form.
 	ScrollView {
 		id: evaluation_form
 		anchors {
-			top: print_selection.bottom
+			top: train_button.bottom
+			topMargin: UM.Theme.getSize("sidebar_margin").height
 			bottom: parent.bottom
 			left: parent.left
 			right: parent.right
