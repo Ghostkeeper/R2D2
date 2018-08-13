@@ -171,7 +171,7 @@ Rectangle {
 					target: item
 					onShowTooltip: {
 						tooltip.text = "<b>" + provider.properties.label + "</b><br />" + provider.properties.description;
-						tooltip.show({x: -UM.Theme.getSize("default_arrow").width, y: evaluation_form.y - evaluation_form.flickableItem.contentY + setting_loader.y + Math.round(setting_loader.height / 4)});
+						tooltip.show({x: -UM.Theme.getSize("default_arrow").width, y: evaluation_form.y - evaluation_form.flickableItem.contentY + setting_loader.y});
 					}
 					onHideTooltip: {
 						tooltip.hide();
