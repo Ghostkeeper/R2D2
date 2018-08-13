@@ -71,6 +71,7 @@ Rectangle {
 				}
 			}
 		}
+		activeFocusOnPress: true
 		menu: PrintsMenu {}
 	}
 
