@@ -7,6 +7,7 @@ import cura.Settings.MachineManager #To get the currently active material and no
 import os #To find the previously saved prints on the disk.
 import PyQt5.QtCore
 import UM.Qt.ListModel #To expose a list to QML.
+import UM.Logger
 import UM.Resources #To find previously saved prints in the data directory.
 
 from . import Print
@@ -92,6 +93,15 @@ class Prints(UM.Qt.ListModel.ListModel):
 		:return: The print that is currently being evaluated.
 		"""
 		return self._selected_print
+
+	@PyQt5.QtCore.pyqtSlot()
+	def train(self):
+		"""
+		Train a machine learner to be able to generate profiles from the
+		user's intentions.
+		"""
+		UM.Logger.Logger.log("i", "Starting training based on evaluation data.")
+		#TODO Implement training.
 
 	def _update(self):
 		"""

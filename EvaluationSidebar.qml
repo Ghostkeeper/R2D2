@@ -87,9 +87,7 @@ Rectangle {
 			rightMargin: UM.Theme.getSize("sidebar_margin").width
 		}
 		text: "Train"
-		onClicked: {
-			print("This would trigger the training process.")
-		}
+		onClicked: Prints.train()
 
 		style: ButtonStyle {
 			background: Rectangle {
