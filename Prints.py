@@ -100,6 +100,9 @@ class Prints(UM.Qt.ListModel.ListModel):
 		Train a machine learner to be able to generate profiles from the
 		user's intentions.
 		"""
+		if len(self.prints) < 2:
+			UM.Logger.Logger.log("e", "Can't train because there is not enough training data.")
+
 		UM.Logger.Logger.log("i", "Starting training based on evaluation data.")
 		#TODO Implement training.
 
