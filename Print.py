@@ -163,6 +163,15 @@ class Print(PyQt5.QtCore.QObject):
 		"""
 		return self._extruders[extruder]
 
+	def evaluated_extruder_settings(self):
+		"""
+		Short-hand to get the settings that were used for the evaluated
+		extruder.
+		:return: A dictionary containing all settings used for the extruder
+		that was evaluated.
+		"""
+		return self.extruder(self.evaluated_extruder())
+
 	@PyQt5.QtCore.pyqtSlot("QVariantMap")
 	def evaluation(self):
 		"""
