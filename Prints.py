@@ -10,6 +10,7 @@ import UM.Qt.ListModel #To expose a list to QML.
 import UM.Logger
 import UM.Resources #To find previously saved prints in the data directory.
 
+from . import LeastSquares #To train a polynomial model.
 from . import Print
 
 class Prints(UM.Qt.ListModel.ListModel):
@@ -100,11 +101,24 @@ class Prints(UM.Qt.ListModel.ListModel):
 		Train a machine learner to be able to generate profiles from the
 		user's intentions.
 		"""
-		if len(self.prints) < 2:
-			UM.Logger.Logger.log("e", "Can't train because there is not enough training data.")
+		if not self.prints:
+			UM.Logger.Logger.log("e", "Can't train before there is any training data.")
 
 		UM.Logger.Logger.log("i", "Starting training based on evaluation data.")
-		#TODO Implement training.
+
+		#TODO: Implement an ensemble system here once we have more than one training method.
+
+		#Train Least Squares individually per setting.
+		for setting in self.prints[0].evaluated_extruder_settings():
+			all_values = [] #Responses.
+			evaluations = [] #Predictors.
+			for prt in self.prints: #TODO: Implement boosting by taking a subset of self.prints.
+				all_values.append(prt.evaluated_extruder_settings()[setting])
+				evaluations.append(prt.evaluation)
+			multipliers = LeastSquares.LeastSquares.train(predictors=evaluations, responses=all_values)
+
+			#TODO: Store the function represented by these multipliers in some way until the profiles are generated.
+			print(multipliers) #DEBUG!
 
 	def _update(self):
 		"""
