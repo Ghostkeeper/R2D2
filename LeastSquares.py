@@ -6,22 +6,44 @@ class LeastSquares:
 	Implementation of the least squares linear regression algorithm.
 
 	This algorithm is used to fit a curve to data. This curve will be
-	polynomial, even though the approximation algorithm is linear.
+	polynomial, even though the approximation algorithm is linear. This fitter
+	will return a polynomial with the specified highest exponent. For instance,
+	filling in `2` for the highest exponent will result in a quadratic
+	polynomial of the form `Ax^2 + Bx + C`. The curve that is fit will be the
+	one with the least squared error, summed for each training sample.
+
+	This data can have any number of dimensions, but once the number of
+	dimensions times the highest exponent starts to become big-ish (>2000),
+	this training method will start to take very long to compute. The bulk of
+	the computation time lies in inverting a matrix of `N` by `N`, where
+	`N = len(predictors) * (highest_exponent + 1)`. This is a cubic operation.
+
+	The Least Squares learner works by solving the following formula:
+
+	`B = (X^T * X)^-1 * X^T * Y`
+
+	Here X are the predictors, the variables that can be controlled for. Y are
+	the responses, the variables that cannot be controlled for and must be
+	computed. B is a vector of the polynomial multipliers (`A`, `B` and `C` in
+	the quadratic formula above). The operation `^T` is matrix transpose. The
+	operation `^-1` is matrix inverse. The operation `*` is matrix
+	multiplication.
 	"""
 
-	@staticmethod
-	def train(predictors, responses, highest_exponent = 4):
+	def __init__(self, predictors, responses, highest_exponent=4):
 		"""
-		Fit a polynomial to the specified data.
+		Create a Least Squares curve fitter.
+		:param predictors: A two-dimensional table of the predictors.
+		:param responses:
+		:param highest_exponent:
+		"""
+		self._predictors = predictors
+		self._responses = responses
+		self._highest_exponent = highest_exponent
 
-		This data can have any number of dimensions, but once the number of
-		dimensions times the highest exponent starts to exceed around ~2000,
-		this training method is not very efficient any more.
-		:param predictors: A two-dimensional table of the predictors. In the
-		major coordinates are the individual measurements. In the minor
-		coordinates are the dimensions of data, each field of the measurement.
-		:param responses: A one-dimensional list of the responses for each of
-		the measurements.
+	def train(self):
+		"""
+		Fit a polynomial to the currently loaded data.
 		:return: A list containing the multipliers of each exponent.
 		"""
 		#TODO.
