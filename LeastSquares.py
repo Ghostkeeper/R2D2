@@ -1,6 +1,9 @@
 #Plug-in to gather after-print feedback to tune your profiles, optimising for certain intent.
 #Copyright (C) 2018 Ghostkeeper
 
+import numpy
+import UM.Logger
+
 class LeastSquares:
 	"""
 	Implementation of the least squares linear regression algorithm.
@@ -46,4 +49,29 @@ class LeastSquares:
 		Fit a polynomial to the currently loaded data.
 		:return: A list containing the multipliers of each exponent.
 		"""
-		#TODO.
+		for train_pred, train_resp, test_pred, test_resp in self._subdivide():
+			#TODO: Train this bag.
+
+	def _subdivide(self, num_bags=5, ratio_train=0.8):
+		"""
+		Subdivide the training data into bags that we can train on separately.
+		Each bag is selected randomly from the original sample set. There is
+		no dependency between the bags. There may be overlap.
+		:param num_bags: How many divisions to make.
+		:param ratio_train: The fraction of the training data that must end up
+		in the training set.
+		:return: A sequence of tuples of four. The first entry is the
+		predictors that are selected. The second entry is the responses that
+		are selected. The third entry is the predictors that were not
+		selected. The fourth entry is the responses that were not selected.
+		"""
+		num_samples = len(self._responses)
+		train_samples = int(num_samples * ratio_train)
+		test_samples = num_samples - train_samples
+		if train_samples == 0 or test_samples == 0:
+			UM.Logger.Logger.log("e", "Too few samples! Training samples: {train_samples}. Testing samples: {test_samples}.".format(train_samples=train_samples, test_samples=test_samples))
+			return
+
+		for bag in range(num_bags):
+			permutation = numpy.random.permutation(num_samples)
+			yield self._predictors[permutation[0:train_samples]], self._responses[permutation[0:train_samples]], self._predictors[permutation[train_samples:]], self._responses[permutation[train_samples:]]
