@@ -36,12 +36,27 @@ class LeastSquares:
 	def __init__(self, predictors, responses, highest_exponent=4):
 		"""
 		Create a Least Squares curve fitter.
-		:param predictors: A two-dimensional table of the predictors.
-		:param responses:
-		:param highest_exponent:
+
+		This also transforms the input data to Numpy arrays that the learner
+		can use.
+		:param predictors: A list of dictionaries of evaluations, one for each
+		print.
+		:param responses: A list of setting values, one for each print.
+		:param highest_exponent: How complex of a polynomial should be fit to
+		this data.
 		"""
-		self._predictors = predictors
-		self._responses = responses
+		#Have to translate the evaluations to a Numpy array.
+		self._predictors = numpy.zeros((len(predictors), len(predictors[0])))
+		all_keys = set()
+		for prt in predictors:
+			all_keys = all_keys.union(prt.keys())
+		all_keys = list(sorted(all_keys))
+		for print_index in range(len(predictors)):
+			for key_index in range(len(all_keys)):
+				if all_keys[key_index] in predictors[print_index]:
+					self._predictors[print_index][key_index] = predictors[print_index][all_keys[key_index]]
+
+		self._responses = numpy.array(responses)
 		self._highest_exponent = highest_exponent
 
 	def train(self):
