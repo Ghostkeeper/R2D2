@@ -64,8 +64,20 @@ class LeastSquares:
 		Fit a polynomial to the currently loaded data.
 		:return: A list containing the multipliers of each exponent.
 		"""
+		all_responses = []
 		for train_pred, train_resp, test_pred, test_resp in self._subdivide():
-			#TODO: Train this bag.
+			coefficients, _, _, _ = numpy.linalg.lstsq(train_pred, train_resp, rcond=None)
+			all_responses.append(coefficients)
+
+			#TODO: Measure efficiacy using test set.
+
+		#Create weighted average of all trainings.
+		average = numpy.ndarray(all_responses[0].shape)
+		for response in all_responses:
+			average += response #TODO: Weight averages using efficiacy.
+		average /= len(all_responses)
+
+		return average
 
 	def _subdivide(self, num_bags=5, ratio_train=0.8):
 		"""
