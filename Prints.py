@@ -112,10 +112,11 @@ class Prints(UM.Qt.ListModel.ListModel):
 		for setting in self.prints[0].evaluated_extruder_settings():
 			all_values = [] #Responses.
 			evaluations = [] #Predictors.
-			for prt in self.prints: #TODO: Implement boosting by taking a subset of self.prints.
+			for prt in self.prints:
 				all_values.append(prt.evaluated_extruder_settings()[setting])
-				evaluations.append(prt.evaluation)
-			multipliers = LeastSquares.LeastSquares.train(predictors=evaluations, responses=all_values)
+				evaluations.append(prt.evaluation())
+			predictor = LeastSquares.LeastSquares(predictors=evaluations, responses=all_values)
+			multipliers = predictor.train()
 
 			#TODO: Store the function represented by these multipliers in some way until the profiles are generated.
 			print(multipliers) #DEBUG!
