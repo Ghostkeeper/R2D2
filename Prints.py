@@ -110,16 +110,20 @@ class Prints(UM.Qt.ListModel.ListModel):
 
 		#Train Least Squares individually per setting.
 		for setting in self.prints[0].evaluated_extruder_settings():
+			#TODO: If the setting has string values, transform this setting into a multi-dimensional one so that there are at most 2 options in every dimension.
 			all_values = [] #Responses.
 			evaluations = [] #Predictors.
 			for prt in self.prints:
-				all_values.append(prt.evaluated_extruder_settings()[setting])
+				value = prt.evaluated_extruder_settings()[setting]
+				if type(value) is bool:
+					value = 1 if value else 0
+				all_values.append(value)
 				evaluations.append(prt.evaluation())
 			predictor = LeastSquares.LeastSquares(predictors=evaluations, responses=all_values)
 			multipliers = predictor.train()
 
 			#TODO: Store the function represented by these multipliers in some way until the profiles are generated.
-			print(multipliers) #DEBUG!
+			print(setting, ":=", multipliers) #DEBUG!
 
 	def _update(self):
 		"""
