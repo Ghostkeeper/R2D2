@@ -112,7 +112,9 @@ class Prints(UM.Qt.ListModel.ListModel):
 		for setting in sorted(self.prints[0].evaluated_extruder_settings()):
 			uniques = set() #For enum and string settings, group all of them by uniques so that we can enumerate over them.
 			for prt in self.prints:
-				uniques.add(prt.evaluated_extruder_settings()[setting])
+				value = prt.evaluated_extruder_settings()[setting]
+				if type(value) is str:
+					uniques.add(value)
 			uniques = list(sorted(uniques))
 			all_values = [] #Responses.
 			evaluations = [] #Predictors.
@@ -128,7 +130,9 @@ class Prints(UM.Qt.ListModel.ListModel):
 					for option in uniques:
 						all_values.append(1 if value == option else 0)
 						evaluations.append(prt.evaluation())
-				else:
+				if type(value) is list:
+					continue #Skip. We always fill in list settings as an empty list.
+				else: #Numeric settings.
 					all_values.append(value)
 					evaluations.append(prt.evaluation())
 			predictor = LeastSquares.LeastSquares(predictors=evaluations, responses=all_values)
