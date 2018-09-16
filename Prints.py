@@ -134,11 +134,14 @@ class Prints(UM.Qt.ListModel.ListModel):
 				else: #Numeric settings.
 					all_values.append(value)
 					evaluations.append(prt.evaluation())
-			predictor = LeastSquares.LeastSquares(predictors=evaluations, responses=all_values)
-			multipliers = predictor.train()
+			if(all_values):
+				predictor = LeastSquares.LeastSquares(predictors=evaluations, responses=all_values)
+				multipliers = predictor.train()
 
-			#TODO: Store the function represented by these multipliers in some way until the profiles are generated.
-			print(setting, ":=", multipliers) #DEBUG!
+				#TODO: Store the function represented by these multipliers in some way until the profiles are generated.
+				print(setting, ":=", multipliers) #DEBUG!
+			else:
+				pass #TODO: Generate empty list [].
 
 	def _update(self):
 		"""
