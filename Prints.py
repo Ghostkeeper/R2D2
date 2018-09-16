@@ -109,16 +109,28 @@ class Prints(UM.Qt.ListModel.ListModel):
 		#TODO: Implement an ensemble system here once we have more than one training method.
 
 		#Train Least Squares individually per setting.
-		for setting in self.prints[0].evaluated_extruder_settings():
-			#TODO: If the setting has string values, transform this setting into a multi-dimensional one so that there are at most 2 options in every dimension.
+		for setting in sorted(self.prints[0].evaluated_extruder_settings()):
+			uniques = set() #For enum and string settings, group all of them by uniques so that we can enumerate over them.
+			for prt in self.prints:
+				uniques.add(prt.evaluated_extruder_settings()[setting])
+			uniques = list(sorted(uniques))
 			all_values = [] #Responses.
 			evaluations = [] #Predictors.
 			for prt in self.prints:
 				value = prt.evaluated_extruder_settings()[setting]
 				if type(value) is bool:
 					value = 1 if value else 0
-				all_values.append(value)
-				evaluations.append(prt.evaluation())
+					all_values.append(value)
+					evaluations.append(prt.evaluation())
+				if type(value) is str:
+					#Create a hyperdimension for this setting with each option in a separate dimension.
+					#The learner will rate each option with a real number and we'll choose the one with the highest rating.
+					for option in uniques:
+						all_values.append(1 if value == option else 0)
+						evaluations.append(prt.evaluation())
+				else:
+					all_values.append(value)
+					evaluations.append(prt.evaluation())
 			predictor = LeastSquares.LeastSquares(predictors=evaluations, responses=all_values)
 			multipliers = predictor.train()
 
