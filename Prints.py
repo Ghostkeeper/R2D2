@@ -121,8 +121,7 @@ class Prints(UM.Qt.ListModel.ListModel):
 			for prt in self.prints:
 				value = prt.evaluated_extruder_settings()[setting]
 				if type(value) is bool:
-					value = 1 if value else 0
-					all_values.append(value)
+					all_values.append(1 if value else 0)
 					evaluations.append(prt.evaluation())
 				if type(value) is str:
 					#Create a hyperdimension for this setting with each option in a separate dimension.
