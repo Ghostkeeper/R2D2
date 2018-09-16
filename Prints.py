@@ -123,13 +123,13 @@ class Prints(UM.Qt.ListModel.ListModel):
 				if type(value) is bool:
 					all_values.append(1 if value else 0)
 					evaluations.append(prt.evaluation())
-				if type(value) is str:
+				elif type(value) is str:
 					#Create a hyperdimension for this setting with each option in a separate dimension.
 					#The learner will rate each option with a real number and we'll choose the one with the highest rating.
 					for option in uniques:
 						all_values.append(1 if value == option else 0)
 						evaluations.append(prt.evaluation())
-				if type(value) is list:
+				elif type(value) is list:
 					continue #Skip. We always fill in list settings as an empty list.
 				else: #Numeric settings.
 					all_values.append(value)
