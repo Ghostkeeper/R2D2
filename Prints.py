@@ -147,7 +147,11 @@ class Prints(UM.Qt.ListModel.ListModel):
 		"""
 		Updates the list of prints exposed to QML.
 		"""
-		current_printer = cura.CuraApplication.CuraApplication.getInstance().getGlobalContainerStack().definition.getId()
+		global_stack = cura.CuraApplication.CuraApplication.getInstance().getGlobalContainerStack()
+		if not global_stack:
+			self.setItems([]) #No printer added yet or no printer any more. Must be empty then.
+			return
+		current_printer = global_stack.definition.getId()
 		active_extruder = cura.Settings.ExtruderManager.ExtruderManager.getInstance().getActiveExtruderStack()
 		current_nozzle = active_extruder.variant.getId()
 		current_material = active_extruder.material.getId()
