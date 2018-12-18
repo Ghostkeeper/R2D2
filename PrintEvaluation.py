@@ -74,7 +74,7 @@ class PrintEvaluation(cura.Stages.CuraStage.CuraStage):
 		Registers the evaluation sidebar panel as a QML component.
 		"""
 		panel = os.path.join(UM.PluginRegistry.PluginRegistry.getInstance().getPluginPath("R2D2"), "EvaluationSidebar.qml")
-		self.addDisplayComponent("menu", panel)
+		self.addDisplayComponent("sidebar", panel)
 
 		#Make sure that the settings in the side bar are updated when switching prints.
 		Prints.Prints.get_instance().selected_print_changed.connect(self._load_from_selected_print)
