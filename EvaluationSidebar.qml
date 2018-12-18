@@ -9,241 +9,242 @@ import Cura 1.0 as Cura
 
 import R2D2 1.0
 
-Rectangle {
+Item {
 	id: base
-	color: UM.Theme.getColor("sidebar")
 
 	UM.I18nCatalog {
 		id: catalog
 		name: "r2d2"
 	}
 
-	//Print selection menu.
-	ToolButton {
-		id: print_selection
-		anchors {
-			left: parent.left
-			right: parent.right
-			top: parent.top
-		}
-		height: UM.Theme.getSize("sidebar_header").height
-		style: ButtonStyle {
-			background: Rectangle {
-				color: {
-					if(control.pressed) {
-						return UM.Theme.getColor("sidebar_header_active");
-					} else if(control.hovered) {
-						return UM.Theme.getColor("sidebar_header_hover");
-					} else {
-						return UM.Theme.getColor("sidebar_header_bar");
-					}
-				}
-				Behavior on color {
-					ColorAnimation {
-						duration: 50
-					}
-				}
+	Rectangle {
+		color: UM.Theme.getColor("main_background")
+		width: Math.round(0.3 * parent.width)
+		anchors.right: parent.right
 
-				Label {
-					color: UM.Theme.getColor("sidebar_header_text_active")
-					text: Prints.selected_print ? Prints.selected_print.name : catalog.i18nc("@label", "No print selected")
-					elide: Text.ElideRight
-					font: UM.Theme.getFont("medium_bold")
-					anchors {
-						left: parent.left
-						leftMargin: UM.Theme.getSize("sidebar_margin").width
-						verticalCenter: parent.verticalCenter
+		//Print selection menu.
+		ToolButton {
+			id: print_selection
+			anchors {
+				left: parent.left
+				right: parent.right
+				top: parent.top
+			}
+			height: UM.Theme.getSize("main_window_header").height
+			style: ButtonStyle {
+				background: Rectangle {
+					color: {
+						if(control.pressed) {
+							return UM.Theme.getColor("action_button_active");
+						} else if(control.hovered) {
+							return UM.Theme.getColor("action_button_hovered");
+						} else {
+							return UM.Theme.getColor("action_button");
+						}
 					}
-				}
+					Behavior on color {
+						ColorAnimation {
+							duration: 50
+						}
+					}
 
-				UM.RecolorImage {
-					anchors {
-						right: parent.right
-						rightMargin: UM.Theme.getSize("default_margin").width
-						verticalCenter: parent.verticalCenter
+					Label {
+						color: UM.Theme.getColor("action_button_text")
+						text: Prints.selected_print ? Prints.selected_print.name : catalog.i18nc("@label", "No print selected")
+						elide: Text.ElideRight
+						font: UM.Theme.getFont("medium_bold")
+						anchors {
+							left: parent.left
+							leftMargin: UM.Theme.getSize("default_margin").width
+							verticalCenter: parent.verticalCenter
+						}
 					}
-					width: UM.Theme.getSize("standard_arrow").width
-					height: UM.Theme.getSize("standard_arrow").height
-					sourceSize.width: width
-					sourceSize.height: height
-					color: UM.Theme.getColor("text_emphasis")
-					source: UM.Theme.getIcon("arrow_bottom")
+
+					UM.RecolorImage {
+						anchors {
+							right: parent.right
+							rightMargin: UM.Theme.getSize("default_margin").width
+							verticalCenter: parent.verticalCenter
+						}
+						width: UM.Theme.getSize("standard_arrow").width
+						height: UM.Theme.getSize("standard_arrow").height
+						sourceSize.width: width
+						sourceSize.height: height
+						color: UM.Theme.getColor("action_button_text")
+						source: UM.Theme.getIcon("arrow_bottom")
+					}
 				}
 			}
+			activeFocusOnPress: true
+			menu: PrintsMenu {}
 		}
-		activeFocusOnPress: true
-		menu: PrintsMenu {}
-	}
 
-	//Train button.
-	Button {
-		id: train_button
-		anchors {
-			top: print_selection.bottom
-			topMargin:  UM.Theme.getSize("sidebar_margin").height
-			left: parent.left
-			leftMargin: UM.Theme.getSize("sidebar_margin").width
-			right: parent.right
-			rightMargin: UM.Theme.getSize("sidebar_margin").width
-		}
-		text: "Train"
-		onClicked: Prints.train()
+		//Train button.
+		Button {
+			id: train_button
+			anchors {
+				top: print_selection.bottom
+				topMargin:  UM.Theme.getSize("default_margin").height
+				left: parent.left
+				leftMargin: UM.Theme.getSize("default_margin").width
+				right: parent.right
+				rightMargin: UM.Theme.getSize("default_margin").width
+			}
+			text: "Train"
+			onClicked: Prints.train()
 
-		style: ButtonStyle {
-			background: Rectangle {
-				color: {
-					if(control.checked || control.pressed) {
-						return UM.Theme.getColor("action_button_active");
-					} else if(control.hovered) {
-						return UM.Theme.getColor("action_button_hovered");
-					} else {
-						return UM.Theme.getColor("action_button");
-					}
-				}
-				border {
+			style: ButtonStyle {
+				background: Rectangle {
 					color: {
 						if(control.checked || control.pressed) {
-							return UM.Theme.getColor("action_button_active_border");
+							return UM.Theme.getColor("action_button_active");
 						} else if(control.hovered) {
-							return UM.Theme.getColor("action_button_hovered_border");
+							return UM.Theme.getColor("action_button_hovered");
 						} else {
-							return UM.Theme.getColor("action_button_border");
+							return UM.Theme.getColor("action_button");
+						}
+					}
+					border {
+						color: {
+							if(control.checked || control.pressed) {
+								return UM.Theme.getColor("action_button_active_border");
+							} else if(control.hovered) {
+								return UM.Theme.getColor("action_button_hovered_border");
+							} else {
+								return UM.Theme.getColor("action_button_border");
+							}
 						}
 					}
 				}
 			}
 		}
-	}
 
-	//The evaluation form.
-	ScrollView {
-		id: evaluation_form
-		anchors {
-			top: train_button.bottom
-			topMargin: UM.Theme.getSize("sidebar_margin").height
-			bottom: parent.bottom
-			left: parent.left
-			right: parent.right
-		}
-		visible: Prints.selected_print != null
-		style: UM.Theme.styles.scrollview
-
-		ListView {
-			spacing: UM.Theme.getSize("default_lining").height
-			model: UM.SettingDefinitionsModel {
-				id: definitions_model
-				containerId: "intents"
-				showAll: true
+		//The evaluation form.
+		ScrollView {
+			id: evaluation_form
+			anchors {
+				top: train_button.bottom
+				topMargin: UM.Theme.getSize("default_margin").height
+				bottom: parent.bottom
+				left: parent.left
+				right: parent.right
 			}
-			delegate: Loader {
-				id: setting_loader
-				anchors {
-					left: parent.left
-					leftMargin: UM.Theme.getSize("sidebar_margin").width
-					right: parent.right
-					rightMargin: UM.Theme.getSize("sidebar_margin").width
-				}
-				height: {
-					if(provider.properties.enabled === "True" && model.type != undefined) {
-						return UM.Theme.getSize("section").height;
-					} else {
-						return 0;
-					}
-				}
-				Behavior on height {
-					NumberAnimation {
-						duration: 100
-					}
-				}
-				opacity: provider.properties.enabled == "True" ? 1 : 0
-				Behavior on opacity {
-					NumberAnimation {
-						duration: 100
-					}
-				}
-				enabled: opacity > 0
-				property var definition: model
-				property var settingDefinitionsModel: definitions_model
-				property var propertyProvider: provider
-				property var globalPropertyProvider: inherit_stack_provider
-				asynchronous: model.type != "enum" && model.type != "extruder"
+			visible: Prints.selected_print != null
+			style: UM.Theme.styles.scrollview
 
-				onLoaded: {
-					//Disable some of the normal buttons and features of the settings list.
-					setting_loader.item.showRevertButton = false;
-					setting_loader.item.showInheritButton = false;
-					setting_loader.item.showLinkedSettingIcon = false;
-					setting_loader.item.doDepthIndentation = false;
-					setting_loader.item.doQualityUserSettingEmphasis = false;
+			ListView {
+				spacing: UM.Theme.getSize("default_lining").height
+				model: UM.SettingDefinitionsModel {
+					id: definitions_model
+					containerId: "intents"
+					showAll: true
 				}
-
-				sourceComponent: {
-					switch(model.type) {
-						case "int":
-						case "float":
-						case "str":
-							return settingTextField;
-						case "enum":
-							return settingComboBox;
-						case "bool":
-							return settingCheckBox;
-						case "category":
-							return settingCategory;
-						default:
-							return settingUnknown;
+				delegate: Loader {
+					id: setting_loader
+					anchors {
+						left: parent.left
+						leftMargin: UM.Theme.getSize("default_margin").width
+						right: parent.right
+						rightMargin: UM.Theme.getSize("default_margin").width
 					}
-				}
-
-				UM.SettingPropertyProvider {
-					id: provider
-					containerStackId: "intents_stack"
-					key: model.key ? model.key : "None"
-					watchedProperties: ["value", "enabled", "state", "validationState", "label", "description"]
-					storeIndex: 0
-				}
-				UM.SettingPropertyProvider {
-					id: inherit_stack_provider
-					containerStackId: Cura.MachineManager.activeMachineId
-					key: model.key ? model.key : "None"
-					watchedProperties: ["limit_to_extruder"]
-				}
-
-				Connections {
-					target: item
-					onShowTooltip: {
-						tooltip.text = "<b>" + provider.properties.label + "</b><br />" + provider.properties.description;
-						tooltip.show({x: -UM.Theme.getSize("default_arrow").width, y: evaluation_form.y - evaluation_form.flickableItem.contentY + setting_loader.y});
+					height: {
+						if(provider.properties.enabled === "True" && model.type != undefined) {
+							return UM.Theme.getSize("section").height;
+						} else {
+							return 0;
+						}
 					}
-					onHideTooltip: {
-						tooltip.hide();
+					Behavior on height {
+						NumberAnimation {
+							duration: 100
+						}
+					}
+					opacity: provider.properties.enabled == "True" ? 1 : 0
+					Behavior on opacity {
+						NumberAnimation {
+							duration: 100
+						}
+					}
+					enabled: opacity > 0
+					property var definition: model
+					property var settingDefinitionsModel: definitions_model
+					property var propertyProvider: provider
+					property var globalPropertyProvider: inherit_stack_provider
+					asynchronous: model.type != "enum" && model.type != "extruder"
+
+					onLoaded: {
+						//Disable some of the normal buttons and features of the settings list.
+						setting_loader.item.showRevertButton = false;
+						setting_loader.item.showInheritButton = false;
+						setting_loader.item.showLinkedSettingIcon = false;
+						setting_loader.item.doDepthIndentation = false;
+						setting_loader.item.doQualityUserSettingEmphasis = false;
+					}
+
+					sourceComponent: {
+						switch(model.type) {
+							case "int":
+							case "float":
+							case "str":
+								return settingTextField;
+							case "enum":
+								return settingComboBox;
+							case "bool":
+								return settingCheckBox;
+							case "category":
+								return settingCategory;
+							default:
+								return settingUnknown;
+						}
+					}
+
+					UM.SettingPropertyProvider {
+						id: provider
+						containerStackId: "intents_stack"
+						key: model.key ? model.key : "None"
+						watchedProperties: ["value", "enabled", "state", "validationState", "label", "description"]
+						storeIndex: 0
+					}
+					UM.SettingPropertyProvider {
+						id: inherit_stack_provider
+						containerStackId: Cura.MachineManager.activeMachineId
+						key: model.key ? model.key : "None"
+						watchedProperties: ["limit_to_extruder"]
+					}
+
+					Connections {
+						target: item
+						onShowTooltip: {
+							tooltip.text = "<b>" + provider.properties.label + "</b><br />" + provider.properties.description;
+							tooltip.show({x: -UM.Theme.getSize("default_arrow").width, y: evaluation_form.y - evaluation_form.flickableItem.contentY + setting_loader.y});
+						}
+						onHideTooltip: {
+							tooltip.hide();
+						}
 					}
 				}
 			}
 		}
-	}
 
-	Component {
-		id: settingTextField
-		Cura.SettingTextField {}
-	}
-	Component {
-		id: settingComboBox
-		Cura.SettingComboBox {}
-	}
-	Component {
-		id: settingCheckBox
-		Cura.SettingCheckBox {}
-	}
-	Component {
-		id: settingCategory
-		Cura.SettingCategory {}
-	}
-	Component {
-		id: settingUnknown
-		Cura.SettingUnknown {}
-	}
-
-	Cura.SidebarTooltip {
-		id: tooltip
+		Component {
+			id: settingTextField
+			Cura.SettingTextField {}
+		}
+		Component {
+			id: settingComboBox
+			Cura.SettingComboBox {}
+		}
+		Component {
+			id: settingCheckBox
+			Cura.SettingCheckBox {}
+		}
+		Component {
+			id: settingCategory
+			Cura.SettingCategory {}
+		}
+		Component {
+			id: settingUnknown
+			Cura.SettingUnknown {}
+		}
 	}
 }
